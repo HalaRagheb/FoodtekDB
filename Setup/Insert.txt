@@ -1,0 +1,105 @@
+INSERT INTO Roles ([Role name AR], [Role name EN], [Assigned user], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+('مدير عام', 'General Manager', 'admin', GETDATE(), 'System', GETDATE(), 'System', 1),
+('موظف', 'Employee', 'user1', GETDATE(), 'System', GETDATE(), 'System', 1),
+('سائق توصيل', 'Delivery Driver', 'user2', GETDATE(), 'System', GETDATE(), 'System', 1);
+
+
+INSERT INTO Users ([First Name], [Last Name], [Password], [birth of date], Email, [Image], [Type], [JWT token], [OTP code], [Phone number], [Is Verified], CreationDate, [Start Date], [End Date], CreationBy, UpdateDate, UpdateBy, IsActive, RoleID)
+VALUES
+('Ahmed', 'Ali', 'password123', '1990-05-15', 'ahmed.ali@email.com', NULL, 'Admin', 'jwt-token-123', 12345, '0781234567', 1, GETDATE(), '2025-01-01', '2025-12-31', 'System', GETDATE(), 'System', 1, 1),
+('Sarah', 'Mohamed', 'password456', '1995-08-20', 'sarah.mohamed@email.com', NULL, 'User', 'jwt-token-456', 67890, '0791234567', 1, GETDATE(), '2025-02-01', '2025-12-31', 'System', GETDATE(), 'System', 1, 2),
+('John', 'Doe', 'password789', '1992-03-10', 'john.doe@email.com', NULL, 'Driver', 'jwt-token-789', 11223, '0771234567', 0, GETDATE(), '2025-03-01', '2025-12-31', 'System', GETDATE(), 'System', 1, 3);
+
+
+INSERT INTO ReportedIssues (Issue, Title, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+('System crash', 'Crash on login', 'admin1', GETDATE(), 'admin1', 1),
+('Broken link', '404 error on product page', 'admin2', GETDATE(), 'admin2', 1),
+('Slow response', 'Delayed page loading', 'admin3', GETDATE(), 'admin3', 0);
+
+INSERT INTO Roles ([Role name AR], [Role name EN], [Assigned user], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES 
+('مدير', 'Admin', 'admin1', GETDATE(), 'admin1', GETDATE(), 'admin1', 1),
+('مستخدم', 'User', 'user1', GETDATE(), 'admin2', GETDATE(), 'admin2', 1),
+('داعم', 'Support', 'user2', GETDATE(), 'admin3', GETDATE(), 'admin3', 1);
+
+
+INSERT INTO Rates ([Rate amount], Feedback, CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive, driver_id)
+VALUES
+(5, 'Excellent service!', GETDATE(), 'admin1', GETDATE(), 'admin1', 1, 1),
+(4, 'Good, but late.', GETDATE(), 'admin2', GETDATE(), 'admin2', 1, 2),
+(3, 'Average experience', GETDATE(), 'admin3', GETDATE(), 'admin3', 0, 3);
+
+
+INSERT INTO MenuItems ([Item Name EN], [Item Name AR], [Item Image], [Item Description AR], [Item Description EN], Category, Price, CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+('Burger', 'برجر', NULL, 'برجر لذيذ', 'Delicious burger', 'Fast Food', 5.99, GETDATE(), 'admin1', GETDATE(), 'admin1', 1),
+('Pizza', 'بيتزا', NULL, 'بيتزا لذيذة', 'Delicious pizza', 'Fast Food', 8.99, GETDATE(), 'admin2', GETDATE(), 'admin2', 1),
+('Salad', 'سلطة', NULL, 'سلطة خفيفة', 'Light salad', 'Vegetarian', 3.99, GETDATE(), 'admin3', GETDATE(), 'admin3', 1);
+
+
+INSERT INTO Orders ([Active Order], [on Shipment Order], [Complete Order], Cancel, [total price], Quantity, CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive, client_id, assigned_driver, status_id, suggest_id, discount_id, offer_id)
+VALUES
+(1, 0, 0, 0, 15.99, 2, GETDATE(), 'admin1', GETDATE(), 'admin1', 1, 1, 1, 1, 1, 1),
+(0, 1, 0, 0, 9.99, 1, GETDATE(), 'admin2', GETDATE(), 'admin2', 1, 2, 2, 2, 2, 2),
+(1, 0, 1, 0, 25.99, 3, GETDATE(), 'admin3', GETDATE(), 'admin3', 0, 3, 3, 3, 3, 3);
+
+
+INSERT INTO Suggests (Received, Approved, Rejected, Issue, Solution, CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive, order_id, client_id)
+VALUES
+(1, 1, 0, 'Order not delivered', 'Deliver immediately', GETDATE(), 'admin1', GETDATE(), 'admin1', 1, 1, 1),
+(1, 0, 1, 'Payment failed', 'Retry payment', GETDATE(), 'admin2', GETDATE(), 'admin2', 0, 2, 2),
+(0, 1, 0, 'Incorrect items', 'Send replacement items', GETDATE(), 'admin3', GETDATE(), 'admin3', 1, 3, 3);
+
+
+-- Insert for DeliveryLocations Table (Jordan Specific)
+INSERT INTO DeliveryLocations (Provunce, Region, [Address Hint / Guidance], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+('Amman', 'Jabal Amman', 'Near the First Circle', GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+('Irbid', 'Downtown Irbid', 'Near the University of Yarmouk', GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+('Aqaba', 'Al-Hawiyah', 'Near the Aqaba Marine Port', GETDATE(), 'Admin', GETDATE(), 'Admin', 1);
+
+
+INSERT INTO Categories ([Image], [Category Name EN], [Category Name AR], [Item count], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+(NULL, 'Fast Food', 'وجبات سريعة', 10, GETDATE(), 'admin1', GETDATE(), 'admin1', 1),
+(NULL, 'Vegetarian', 'نباتي', 5, GETDATE(), 'admin2', GETDATE(), 'admin2', 1),
+(NULL, 'Desserts', 'حلويات', 3, GETDATE(), 'admin3', GETDATE(), 'admin3', 1);
+
+
+INSERT INTO Discounts (Title EN, Title AR, Description EN, Description AR, [Start Date], [End Date], [Limit Amount], Code, [Image], [Discount Percentage], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+('Summer Discount', 'خصم الصيف', 'Discount on all items', 'خصم على جميع العناصر', '2025-06-01', '2025-06-30', 100.00, 12345, NULL, 20, GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+('Winter Sale', 'تخفيضات الشتاء', 'Special winter sale', 'تخفيضات خاصة بالشتاء', '2025-12-01', '2025-12-15', 50.00, 67890, NULL, 15, GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+('Flash Offer', 'عرض فلاش', 'Flash offer for today', 'عرض فلاش لليوم', '2025-04-05', '2025-04-05', 30.00, 11223, NULL, 10, GETDATE(), 'Admin', GETDATE(), 'Admin', 1);
+
+
+INSERT INTO Offers ([Current Offer], [Expired Offer], [Canceled Offer], [Title AR], [Title EN], [Description], [Start Date], [End Date], CreationDate, CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+(1, 0, 0, 'عرض الصيف', 'Summer Offer', 'Great discount on summer items', '2025-06-01', '2025-06-30', GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+(0, 1, 0, 'عرض الشتاء', 'Winter Offer', 'Winter special discount', '2025-12-01', '2025-12-15', GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+(1, 0, 0, 'عرض اليوم', 'Today\'s Flash Offer', 'Special offer valid today only', '2025-04-05', '2025-04-05', GETDATE(), 'Admin', GETDATE(), 'Admin', 1);
+
+
+INSERT INTO Notifications (Title, [Is Read], [Type], [Creation Date], CreationBy, UpdateDate, UpdateBy, IsActive, category_id, discount_id, offer_id)
+VALUES
+('New Offer Available', 0, 'Offer', GETDATE(), 'Admin', GETDATE(), 'Admin', 1, 1, 1, 1),
+('Payment Failed', 0, 'Alert', GETDATE(), 'Admin', GETDATE(), 'Admin', 1, 2, NULL, NULL),
+('New Delivery Location', 0, 'Update', GETDATE(), 'Admin', GETDATE(), 'Admin', 1, 3, NULL, NULL);
+
+INSERT INTO OrderMenuItems (OrderID, MenuItemID)
+VALUES
+(101, 1),
+(102, 2),
+(103, 3);
+
+INSERT INTO Status (Active, [Not Activated Yet], Forbidden, Blocked, [New offer], [Active offer], [Expired offer], Canceled, [Creation Date], CreationBy, UpdateDate, UpdateBy, IsActive)
+VALUES
+(1, 0, 0, 0, 1, 1, 0, 0, GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+(0, 1, 0, 0, 0, 1, 0, 0, GETDATE(), 'Admin', GETDATE(), 'Admin', 1),
+(0, 0, 1, 0, 0, 0, 1, 1, GETDATE(), 'Admin', GETDATE(), 'Admin', 1);
+
+
+
+

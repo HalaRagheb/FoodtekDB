@@ -1,0 +1,297 @@
+use FoodtekManagementSystem
+CREATE TABLE Users (
+UsersId INT PRIMARY KEY Identity,
+
+[First Name] Varchar(50),
+[Last Name] Varchar(50),
+[Password] VARCHAR(20),
+[birth of date] datetime,
+check ([password] Like '________%'),
+Email VARCHAR(20)unique,
+CHECK (Email LIKE '%_@__%.%'),
+[Image] VARBINARY(MAX),
+[Type] varchar(20),
+[JWT token] varchar(40),
+[OTP code] int,
+[Phone number]  varchar(15),
+CHECK ([Phone number] LIKE '07[789][0-9]{7}'),
+[Is Verified] bit default 0 ,
+CreationDate Datetime,
+[Start Date] Datetime,
+[End Date] Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Users
+ADD  RoleID INT;
+ALTER TABLE Users
+ADD CONSTRAINT FK_Users_Role FOREIGN KEY (RoleID) REFERENCES Roles(RolesID);
+CREATE TABLE ReportedIssues (
+    SuggestID INT PRIMARY KEY,
+    Issue VARCHAR(100),
+    Title VARCHAR(100),
+    CreationBy VARCHAR(30),
+    UpdateDate DATETIME,
+    UpdateBy VARCHAR(30),
+    IsActive BIT DEFAULT 0
+);
+ALTER TABLE ReportedIssues
+ADD  order_id INT;
+ALTER TABLE ReportedIssues
+ADD CONSTRAINT FK_ReportedIssues_Order FOREIGN KEY (order_id) REFERENCES Orders(OrderID);
+
+ALTER TABLE ReportedIssues
+ADD client_id INT;
+ALTER TABLE ReportedIssues
+ADD CONSTRAINT FK_ReportedIssues_Client FOREIGN KEY (client_id) REFERENCES Users(UsersId);
+
+Create table Roles(
+RolesID int PRIMARY KEY   identity,
+[Role name AR] varchar(20) unique,
+[Role name EN] varchar(20)unique,
+[Assigned user] varchar(15), 
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+
+ALTER TABLE Users
+ADD CONSTRAINT FK_Users2_Role FOREIGN KEY (RoleID) REFERENCES Roles(RolesID);
+
+Create table Rates(
+RatesID int PRIMARY KEY  identity,
+[Rate amount] int,
+Feedback varchar(100),
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Rates
+ADD  driver_id INT;
+ALTER TABLE Rates
+ADD CONSTRAINT FK_Rates_Driver FOREIGN KEY (driver_id) REFERENCES Users(UsersId);
+
+Create table MenuItems(
+MenuItemID int PRIMARY KEY  identity,
+[Item Name EN] varchar(15) ,
+[Item Name AR] varchar(15) ,
+[Item Image] varbinary(max) ,
+[Item Description AR] varchar(100),
+[Item Description EN] varchar(100),
+Category varchar(15),
+Price float,
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE MenuItems
+ADD  category_id INT;
+ALTER TABLE MenuItems
+ADD CONSTRAINT FK_MenuItems_Category FOREIGN KEY (category_id) REFERENCES Categories(CategoryID);
+
+ALTER TABLE MenuItems
+ADD  employee_id INT;
+ALTER TABLE MenuItems
+ADD CONSTRAINT FK_MenuItems_Employee FOREIGN KEY (employee_id) REFERENCES Users(UsersId);
+
+Create table Orders(
+OrderID int PRIMARY KEY identity,
+[Active Order] bit ,
+[on Shipment Order] bit ,
+[Complete Order] bit,
+Cancel bit ,
+[total price] float ,
+Quantity int,
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Orders
+ADD  client_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Client FOREIGN KEY (client_id) REFERENCES Users(UsersId);
+
+ALTER TABLE Orders
+ADD  assigned_driver INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Driver FOREIGN KEY (assigned_driver) REFERENCES Users(UsersId);
+ALTER TABLE Orders
+ADD  status_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Status FOREIGN KEY (status_id) REFERENCES Status(StatusID);
+///////////////////////////////////////////
+ALTER TABLE Orders
+ADD  suggest_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Suggest FOREIGN KEY (suggest_id) REFERENCES Suggests(SuggestID);
+
+ALTER TABLE Orders
+ADD  discount_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Discount FOREIGN KEY (discount_id) REFERENCES Discounts(DiscountID);
+
+ALTER TABLE Orders
+ADD  offer_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Offer FOREIGN KEY (offer_id) REFERENCES Offers([Discount ID]);
+//////////////////////////////////////////////////////
+Create table Suggests(
+SuggestID int PRIMARY KEY  identity,
+Received bit , 
+Approved bit ,
+Rejected bit,
+Issue varchar(15) , 
+Solution varchar(100),
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Suggests
+ADD order_id INT;
+ALTER TABLE Suggests
+ADD CONSTRAINT FK_Suggests_Order FOREIGN KEY (order_id) REFERENCES Orders(OrderID);
+
+ALTER TABLE Suggests
+ADD  client_id INT;
+ALTER TABLE Suggests
+ADD CONSTRAINT FK_Suggests_Client FOREIGN KEY (client_id) REFERENCES Users(UsersId);
+
+Create table DeliveryLocations(
+[Address Id] int PRIMARY KEY  identity,
+Provunce varchar(20) ,
+Region varchar(20) ,
+[Address Hint / Guidance] varchar(20),
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Orders
+ADD  delivery_location_id INT;
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_DeliveryLocation FOREIGN KEY (delivery_location_id) REFERENCES DeliveryLocations([Address Id]);
+//////////////////////////////
+Create table Categories(
+CategoryID int PRIMARY KEY  identity,
+[Image] varbinary(max) ,
+[Category Name EN] varchar(20) ,
+[Category Name AR] varchar(20),
+[Item count] int,
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Discounts
+ADD  category_id INT;
+ALTER TABLE Discounts
+ADD CONSTRAINT FK_Discounts_Category FOREIGN KEY (category_id) REFERENCES Categories(CategoryID);
+
+ALTER TABLE Offers
+ADD  category_id INT;
+ALTER TABLE Offers
+ADD CONSTRAINT FK_Offers_Category FOREIGN KEY (category_id) REFERENCES Categories(CategoryID);
+
+Create table Discounts(
+DiscountID int PRIMARY KEY identity ,
+[Title EN] varchar(20)
+,[Title AR] varchar(20) ,
+[Description EN] varchar(100) ,
+[Description AR] varchar(100) , 
+[Start Date] datetime , 
+[End Date] datetime ,
+[Limit Amount] float ,
+Code float ,
+[Image] varbinary(max) , 
+[Discount Percentage] int,
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+Create table Offers(
+[Discount ID] int PRIMARY KEY  identity,
+[Current Offer] bit , 
+[Expired Offer] bit , 
+[Canceled Offer] bit,
+[Title AR] varchar(30) ,
+[Title EN] varchar(30) ,
+[Description] varchar(100),
+[Start Date] datetime , 
+[End Date] datetime ,
+CreationDate Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+Create table Notifications(
+NotificatinID int  PRIMARY KEY identity,
+Title varchar(15) ,
+[Is Read] bit  ,
+[Type] varchar(30),
+[Creation Date] Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
+ALTER TABLE Notifications
+ADD  category_id INT;
+ALTER TABLE Notifications
+ADD CONSTRAINT FK_Notifications_Category FOREIGN KEY (category_id) REFERENCES Categories(CategoryID);
+ALTER TABLE Notifications
+ADD  discount_id INT;
+ALTER TABLE Notifications
+ADD CONSTRAINT FK_Notifications_Discount FOREIGN KEY (discount_id) REFERENCES Discounts(DiscountID);
+
+ALTER TABLE Notifications
+ADD  offer_id INT;
+ALTER TABLE Notifications
+ADD CONSTRAINT FK_Notifications_Offer FOREIGN KEY (offer_id) REFERENCES Offers([Discount ID]);
+
+CREATE TABLE OrderMenuItems (
+    OrderID INT,
+    MenuItemID INT,
+    PRIMARY KEY (OrderID, MenuItemID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (MenuItemID) REFERENCES MenuItems(MenuItemID)
+);
+
+
+
+
+ALTER TABLE ReportedIssues
+ADD CONSTRAINT FK_ReportedIssues_Suggest FOREIGN KEY (SuggestID) REFERENCES Suggests(SuggestID);
+
+Create table Status(
+StatusID int Primary key identity,
+Active bit , 
+[Not Activated Yet] bit ,
+Forbidden bit ,
+Blocked bit,
+[New offer] bit ,
+[Active offer] bit ,
+[Expired offer] bit 
+, Canceled bit ,
+[Creation Date] Datetime,
+CreationBy Varchar(30),
+UpdateDate DateTime,
+UpdateBy Varchar(30),
+IsActive bit default 0
+)
